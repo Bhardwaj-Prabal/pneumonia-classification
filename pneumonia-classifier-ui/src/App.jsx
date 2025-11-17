@@ -15,7 +15,7 @@ const PneumoniaClassifier = () => {
   const fileInputRef = useRef(null);
 
   // API base URL - adjust this to your backend URL
-  const API_URL = 'http://localhost:6798';
+  const API_URL = 'https://lynwood-serviceable-unfrictionally.ngrok-free.dev';
 
   // Fetch health status on mount
   useEffect(() => {
