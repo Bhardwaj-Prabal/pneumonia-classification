@@ -160,20 +160,38 @@ const PneumoniaClassifier = () => {
     }
   };
 
-  const ConfidenceBar = ({ label, value, color }) => (
-    <div className="mb-3">
-      <div className="flex justify-between mb-1">
-        <span className="text-sm font-medium text-gray-700">{label}</span>
-        <span className="text-sm font-bold text-gray-900">{(value * 100).toFixed(2)}%</span>
+  const ConfidenceBar = ({ label, value, color }) => {
+    // Format percentage with appropriate precision
+    const formatPercentage = (val) => {
+      const percentage = val * 100;
+      if (percentage >= 99.99) {
+        return percentage.toFixed(4); // Show 4 decimals for very high confidence
+      } else if (percentage >= 99.9) {
+        return percentage.toFixed(3); // Show 3 decimals for high confidence
+      } else if (percentage <= 0.01) {
+        return percentage.toFixed(4); // Show 4 decimals for very low values
+      } else if (percentage <= 0.1) {
+        return percentage.toFixed(3); // Show 3 decimals for low values
+      } else {
+        return percentage.toFixed(2); // Standard 2 decimals
+      }
+    };
+
+    return (
+      <div className="mb-3">
+        <div className="flex justify-between mb-1">
+          <span className="text-sm font-medium text-gray-700">{label}</span>
+          <span className="text-sm font-bold text-gray-900">{formatPercentage(value)}%</span>
+        </div>
+        <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
+          <div
+            className={`h-3 rounded-full transition-all duration-1000 ease-out ${color}`}
+            style={{ width: `${Math.min(value * 100, 100)}%` }}
+          />
+        </div>
       </div>
-      <div className="w-full bg-gray-200 rounded-full h-3 overflow-hidden">
-        <div
-          className={`h-3 rounded-full transition-all duration-1000 ease-out ${color}`}
-          style={{ width: `${value * 100}%` }}
-        />
-      </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-cyan-50">
